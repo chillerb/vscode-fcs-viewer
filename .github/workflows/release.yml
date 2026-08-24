@@ -7,12 +7,19 @@ name: Release
 # Marketplace > Manage) and OVSX_PAT (open-vsx.org access token). The Open VSX
 # namespace must exist first -- once, by hand:
 #   npx ovsx create-namespace chillerb -p <OVSX_PAT>
+#
+# The two registries publish in separate jobs on purpose. Neither lets a
+# version be republished, so if they shared a job, one failing would leave the
+# other unretryable: re-running would hit "already exists" on the one that
+# worked. Split, "Re-run failed jobs" retries only the one that failed.
 on:
   push:
     tags: ['v*']
 
 jobs:
-  publish:
+  # Packaged once, published twice, so both registries serve the same bytes.
+  # `vsce package` runs vscode:prepublish, the production build.
+  package:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -24,14 +31,44 @@ jobs:
 
       - run: npm ci
 
-      # Packaged once and published twice, so both registries serve the same
-      # bytes. `vsce package` runs vscode:prepublish, the production build.
       - run: npx --yes @vscode/vsce package --out extension.vsix
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: vsix
+          path: extension.vsix
+          if-no-files-found: error
+
+  marketplace:
+    needs: package
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: vsix
 
       - run: npx --yes @vscode/vsce publish --packagePath extension.vsix
         env:
           VSCE_PAT: ${{ secrets.VSCE_PAT }}
 
-      - run: npx --yes ovsx publish extension.vsix --pat "$OVSX_PAT"
+  open-vsx:
+    needs: package
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: vsix
+
+      # --skip-duplicate so a re-run of this job is a no-op rather than an
+      # error. vsce has no equivalent, which is why the split above matters.
+      - run: npx --yes ovsx publish extension.vsix --skip-duplicate --pat "$OVSX_PAT"
         env:
           OVSX_PAT: ${{ secrets.OVSX_PAT }}
