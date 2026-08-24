@@ -1,0 +1,15 @@
+{
+  // Type-checks the webview + shared code. Emits nothing; esbuild builds dist/webview.js.
+  // `types: []` deliberately excludes @types/node so browser code cannot reach for `process`.
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "jsx": "react-jsx",
+    "verbatimModuleSyntax": true,
+    "types": ["vscode-webview"],
+    "noEmit": true
+  },
+  "include": ["src/webview/**/*", "src/common/**/*"]
+}

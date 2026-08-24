@@ -1,0 +1,44 @@
+.app-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 16px;
+	flex-wrap: wrap;
+	padding: 6px 10px;
+	border-bottom: 1px solid var(--fcs-border);
+	flex: 0 0 auto;
+}
+
+.app-title { display: flex; flex-direction: column; min-width: 0; }
+.app-title .dim { font-size: 0.9em; }
+
+.app-controls { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.app-controls label { display: flex; align-items: center; gap: 5px; white-space: nowrap; }
+.app-controls input[type="checkbox"] { accent-color: var(--fcs-accent); }
+
+.transfer-confirm {
+	flex: 1 0 100%;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	flex-wrap: wrap;
+	padding: 6px 2px 2px;
+	font-size: 0.9em;
+	color: var(--fcs-fg-dim);
+}
+
+/* The workspace name, above the active sample. Deliberately quiet: it is
+   context, not the thing you are looking at. */
+.workspace-name {
+	font-size: 0.85em;
+	color: var(--fcs-fg-dim);
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.workspace-name.unsaved { font-style: italic; opacity: 0.7; }
+
+/* Compensation is on but this sample has no matrix: the setting is real, its
+   effect here is not. */
+.app-header label.inactive { opacity: 0.6; text-decoration: line-through; }

@@ -1,0 +1,37 @@
+name: Release
+
+# Push a tag matching the version in package.json:
+#   git tag v0.1.0 && git push origin v0.1.0
+#
+# Needs two repository secrets: VSCE_PAT (Azure DevOps, scoped to
+# Marketplace > Manage) and OVSX_PAT (open-vsx.org access token). The Open VSX
+# namespace must exist first -- once, by hand:
+#   npx ovsx create-namespace chillerb -p <OVSX_PAT>
+on:
+  push:
+    tags: ['v*']
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      # Packaged once and published twice, so both registries serve the same
+      # bytes. `vsce package` runs vscode:prepublish, the production build.
+      - run: npx --yes @vscode/vsce package --out extension.vsix
+
+      - run: npx --yes @vscode/vsce publish --packagePath extension.vsix
+        env:
+          VSCE_PAT: ${{ secrets.VSCE_PAT }}
+
+      - run: npx --yes ovsx publish extension.vsix --pat "$OVSX_PAT"
+        env:
+          OVSX_PAT: ${{ secrets.OVSX_PAT }}

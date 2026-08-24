@@ -1,0 +1,70 @@
+.inspector {
+	/* Set on .plots-view by PlotsView, and by the splitter during a drag. */
+	width: var(--inspector-w, 250px); flex: 0 0 var(--inspector-w, 250px);
+	border-left: 1px solid var(--fcs-border);
+	display: flex; flex-direction: column; overflow: hidden;
+}
+
+.inspector-head {
+	padding: 6px 10px; font-weight: 600; font-size: 0.85em;
+	text-transform: uppercase; letter-spacing: 0.04em;
+	border-bottom: 1px solid var(--fcs-border);
+}
+
+.inspector-body { overflow-y: auto; padding: 8px 10px 24px; display: flex; flex-direction: column; gap: 12px; }
+.inspector-empty { padding: 10px; }
+
+.inspector-group { display: flex; flex-direction: column; gap: 6px; padding-bottom: 10px; border-bottom: 1px solid var(--fcs-border); }
+.inspector-group:last-child { border-bottom: none; }
+
+.inspector .row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.inspector .row > label { display: flex; align-items: center; gap: 4px; }
+.inspector .check { display: flex; align-items: center; gap: 5px; }
+.inspector .hint { margin: 0; font-size: 0.85em; }
+
+.segmented { display: inline-flex; border: 1px solid var(--fcs-input-border); border-radius: 3px; overflow: hidden; }
+.segmented button { border: none; border-radius: 0; padding: 2px 8px; background: var(--fcs-input-bg); }
+.segmented button + button { border-left: 1px solid var(--fcs-border); }
+.segmented button.active { background: var(--fcs-active); color: var(--fcs-active-fg); }
+
+.number-field { display: flex; align-items: center; gap: 4px; }
+
+.inspector .params {
+	border: 1px solid var(--fcs-border);
+	border-radius: 3px;
+	margin: 0;
+	padding: 4px 8px 8px;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+}
+.inspector .params legend { padding: 0 4px; font-size: 0.85em; }
+
+/* The projection channel list. In flow, unlike the table's column picker,
+   which is an absolutely positioned dropdown -- and scrollable, because a mass
+   cytometry panel has forty of these. */
+/* Marker names are long and the panel is narrow: one row each, clipped, with
+   the full text in the label's tooltip. */
+.umap-channels .check { min-width: 0; }
+.umap-channels .channel-name,
+.umap-channels .channel-alias {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+.umap-channels .channel-name { flex: 0 1 auto; }
+.umap-channels .channel-alias { flex: 0 2 auto; font-size: 0.85em; }
+.umap-channels .absent .channel-name { text-decoration: line-through; }
+.umap-channels .absent-tag { flex: none; margin-left: auto; font-size: 0.8em; }
+.umap-channels .list-divider { width: 100%; margin: 4px 0; border: none; border-top: 1px solid var(--fcs-border); }
+
+.umap-channels {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	max-height: 220px;
+	overflow-y: auto;
+	padding: 4px 6px;
+	border: 1px solid var(--fcs-border);
+	border-radius: 3px;
+}

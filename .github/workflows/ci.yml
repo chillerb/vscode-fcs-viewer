@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Type-check host and webview
+        run: npm run check-types
+
+      - run: npm run lint
+
+      # Synthetic fixtures only. The real-file assertions need the gitignored
+      # ~40 MB samples, so the awkward cases they cover -- wrong DATA offsets,
+      # bit-packed $PnB, spillover keyword variants, an empty $FIL written as a
+      # doubled delimiter -- are reproduced by makeFcs and run here.
+      - name: Unit tests
+        run: npm run test:unit
+
+      # The integration suite drives a real VS Code, which needs a display.
+      # The --disable-dev-shm-usage launch arg it relies on is already in
+      # .vscode-test.mjs, because containers cap /dev/shm at 64 MB and Electron
+      # crashes without it.
+      - name: Integration tests
+        run: xvfb-run -a npm test
+
+      # The same command the release runs, so a release cannot fail on
+      # something CI accepted. It validates the manifest too, which is what
+      # would have caught a version of "0.1" -- invalid semver, so VS Code
+      # discards the extension at scan time and it never loads at all.
+      - name: Check the extension can be packaged
+        run: npx --yes @vscode/vsce package --out /tmp/check.vsix

@@ -1,0 +1,67 @@
+/* VS Code's theme variables are the design system. Every var() has a fallback:
+   --vscode-charts-* is undefined in many themes and would otherwise render
+   transparent. */
+:root {
+	--fcs-bg: var(--vscode-editor-background, #1e1e1e);
+	--fcs-fg: var(--vscode-editor-foreground, var(--vscode-foreground, #ccc));
+	--fcs-fg-dim: var(--vscode-descriptionForeground, #999);
+	--fcs-border: var(--vscode-panel-border, var(--vscode-editorWidget-border, #454545));
+	--fcs-card-bg: var(--vscode-editorWidget-background, #252526);
+	--fcs-hover: var(--vscode-list-hoverBackground, #2a2d2e);
+	--fcs-active: var(--vscode-list-activeSelectionBackground, #04395e);
+	--fcs-active-fg: var(--vscode-list-activeSelectionForeground, #fff);
+	--fcs-accent: var(--vscode-focusBorder, #007fd4);
+	--fcs-input-bg: var(--vscode-input-background, #3c3c3c);
+	--fcs-input-fg: var(--vscode-input-foreground, #ccc);
+	--fcs-input-border: var(--vscode-input-border, transparent);
+	--fcs-error: var(--vscode-inputValidation-errorBorder, #be1100);
+	--fcs-warning-bg: var(--vscode-inputValidation-warningBackground, #352a05);
+	--fcs-warning-border: var(--vscode-inputValidation-warningBorder, #b89500);
+	--fcs-btn-bg: var(--vscode-button-background, #0e639c);
+	--fcs-btn-fg: var(--vscode-button-foreground, #fff);
+	--fcs-btn-secondary-bg: var(--vscode-button-secondaryBackground, #3a3d41);
+	--fcs-btn-secondary-fg: var(--vscode-button-secondaryForeground, #ccc);
+	--fcs-mono: var(--vscode-editor-font-family, monospace);
+	--fcs-font: var(--vscode-font-family, sans-serif);
+	--fcs-font-size: var(--vscode-font-size, 13px);
+	--fcs-plot-fg: var(--vscode-charts-foreground, var(--fcs-fg));
+	--fcs-plot-line: var(--vscode-charts-lines, var(--fcs-border));
+	--fcs-series: var(--vscode-charts-blue, #3794ff);
+}
+
+* { box-sizing: border-box; }
+
+html, body, #root {
+	height: 100%;
+	margin: 0;
+	overflow: hidden;
+}
+
+body {
+	background: var(--fcs-bg);
+	color: var(--fcs-fg);
+	font: var(--fcs-font-size) / 1.45 var(--fcs-font);
+}
+
+button, input, select {
+	font-family: inherit;
+	font-size: inherit;
+	color: var(--fcs-input-fg);
+	background: var(--fcs-input-bg);
+	border: 1px solid var(--fcs-input-border);
+	border-radius: 3px;
+	padding: 2px 6px;
+}
+
+button { cursor: pointer; }
+button:hover { background: var(--fcs-hover); }
+button.primary { background: var(--fcs-btn-bg); color: var(--fcs-btn-fg); border-color: transparent; }
+button.primary:hover { opacity: 0.9; }
+
+:focus-visible {
+	outline: 1px solid var(--fcs-accent);
+	outline-offset: 2px;
+}
+
+.dim { color: var(--fcs-fg-dim); }
+.mono { font-family: var(--fcs-mono); }

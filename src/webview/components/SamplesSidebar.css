@@ -1,0 +1,65 @@
+.samples {
+	display: flex;
+	flex-direction: column;
+	/* Set on .app-body by App, and by the splitter during a drag. */
+	width: var(--samples-w, 200px);
+	flex: 0 0 var(--samples-w, 200px);
+	border-right: 1px solid var(--fcs-border);
+	overflow: hidden;
+}
+
+.samples-head {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 6px 8px;
+	font-weight: 600;
+	text-transform: uppercase;
+	font-size: 0.85em;
+	letter-spacing: 0.04em;
+	border-bottom: 1px solid var(--fcs-border);
+}
+
+.samples-head button { padding: 0 8px; line-height: 20px; }
+
+.samples-list { list-style: none; margin: 0; padding: 0; overflow-y: auto; flex: 1; }
+.samples-list li { display: flex; align-items: stretch; }
+
+.sample {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 1px;
+	text-align: left;
+	background: none;
+	border: none;
+	border-left: 2px solid transparent;
+	border-radius: 0;
+	padding: 5px 8px;
+	min-width: 0;
+}
+
+.sample:hover { background: var(--fcs-hover); }
+.sample.active { background: var(--fcs-active); color: var(--fcs-active-fg); border-left-color: var(--fcs-accent); }
+.sample.active .dim { color: inherit; opacity: 0.75; }
+.sample.failed .sample-meta { color: var(--fcs-error); }
+
+.sample-name { width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sample-meta { font-size: 0.85em; }
+
+.sample-spinner {
+	width: 10px; height: 10px; margin-top: 3px;
+	border: 1.5px solid currentColor; border-right-color: transparent; border-radius: 50%;
+	animation: fcs-spin 0.8s linear infinite;
+}
+@keyframes fcs-spin { to { transform: rotate(360deg); } }
+
+.sample-remove {
+	background: none; border: none; border-radius: 0;
+	color: var(--fcs-fg-dim); padding: 0 6px; opacity: 0;
+}
+.samples-list li:hover .sample-remove { opacity: 1; }
+.sample-remove:hover { color: var(--fcs-error); background: none; }
+
+.samples-empty { padding: 8px; margin: 0; font-size: 0.9em; }

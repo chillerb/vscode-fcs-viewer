@@ -1,0 +1,13 @@
+.tabbar { display: flex; border-bottom: 1px solid var(--fcs-border); flex: 0 0 auto; }
+
+.tab {
+	background: none;
+	border: none;
+	border-bottom: 2px solid transparent;
+	border-radius: 0;
+	padding: 5px 14px;
+	color: var(--fcs-fg-dim);
+}
+
+.tab:hover { background: var(--fcs-hover); }
+.tab.active { color: var(--fcs-fg); border-bottom-color: var(--fcs-accent); }

@@ -1,0 +1,17 @@
+{
+  // The ONLY emitting tsconfig. Output in out/ is consumed by the test runners:
+  //   - out/test/unit/**        node --test (no VS Code host)
+  //   - out/test/integration/** mocha under @vscode/test-cli
+  // The shipped extension runs from dist/ (esbuild), not from here.
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "module": "Node16",
+    "moduleResolution": "Node16",
+    "lib": ["ES2022"],
+    "types": ["node", "mocha"],
+    "outDir": "out",
+    "rootDir": "src",
+    "noEmit": false
+  },
+  "include": ["src/test/**/*", "src/common/**/*", "src/extension/**/*"]
+}

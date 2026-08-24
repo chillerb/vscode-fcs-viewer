@@ -1,0 +1,30 @@
+/*
+ * A 1px border is not a pointer target. The splitter is 7px wide and pulled
+ * back over its neighbours with negative margins, so it costs no layout space
+ * and the visible edge stays the panel's own border.
+ */
+.resizer {
+	flex: 0 0 7px;
+	margin: 0 -3px;
+	z-index: 2;
+	cursor: col-resize;
+	position: relative;
+	touch-action: none;
+}
+
+/* The highlight is the same 2px accent bar the card drop indicator uses. */
+.resizer::after {
+	content: '';
+	position: absolute;
+	inset: 0 2px;
+	background: transparent;
+}
+
+.resizer:hover::after,
+.resizer:focus-visible::after {
+	background: var(--fcs-accent);
+}
+
+.resizer:focus-visible {
+	outline: none;
+}

@@ -1,0 +1,10 @@
+data/
+.claude/
+
+out
+dist
+node_modules
+.vscode-test/
+*.vsix
+preview/
+

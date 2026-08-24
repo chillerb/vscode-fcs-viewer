@@ -1,0 +1,239 @@
+{
+  "name": "vscode-fcs-viewer",
+  "displayName": "FCS Viewer",
+  "description": "Inspect flow cytometry data from FCS files in VS Code",
+  "publisher": "chillerb",
+  "version": "0.1.0",
+  "license": "MIT",
+  "icon": "logo.png",
+  "engines": {
+    "vscode": "^1.134.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chillerb/vscode-fcs-viewer.git"
+  },
+  "categories": [
+    "Data Science",
+    "Visualization",
+    "Other"
+  ],
+  "activationEvents": [
+    "onWebviewPanel:fcsViewer.workspace"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "fcsViewer.openWorkspace",
+        "title": "Open Workspace…",
+        "category": "FCS Viewer",
+        "icon": "$(graph-scatter)"
+      },
+      {
+        "command": "fcsViewer.saveWorkspace",
+        "title": "Save Workspace…",
+        "category": "FCS Viewer"
+      },
+      {
+        "command": "fcsViewer.discardWorkspace",
+        "title": "Discard Workspace…",
+        "category": "FCS Viewer"
+      },
+      {
+        "command": "fcsViewer.openFileInNewWorkspace",
+        "title": "Open in FCS Viewer",
+        "category": "FCS Viewer"
+      },
+      {
+        "command": "fcsViewer.addFileToWorkspace",
+        "title": "Add to FCS Viewer Workspace",
+        "category": "FCS Viewer"
+      },
+      {
+        "command": "fcsViewer.debugState",
+        "title": "Debug State",
+        "category": "FCS Viewer",
+        "enablement": "false"
+      },
+      {
+        "command": "fcsViewer.debugReset",
+        "title": "Debug Reset",
+        "category": "FCS Viewer",
+        "enablement": "false"
+      },
+      {
+        "command": "fcsViewer.debugRevive",
+        "title": "Debug Revive",
+        "category": "FCS Viewer",
+        "enablement": "false"
+      },
+      {
+        "command": "fcsViewer.debugCloseTabs",
+        "title": "Debug Close Tabs",
+        "category": "FCS Viewer",
+        "enablement": "false"
+      },
+      {
+        "command": "fcsViewer.debugWorkspace",
+        "title": "Debug Workspace",
+        "category": "FCS Viewer",
+        "enablement": "false"
+      },
+      {
+        "command": "fcsViewer.debugSelect",
+        "title": "Debug Select Sample",
+        "category": "FCS Viewer",
+        "enablement": "false"
+      },
+      {
+        "command": "fcsViewer.debugEvictCache",
+        "title": "Debug Evict Cache",
+        "category": "FCS Viewer",
+        "enablement": "false"
+      }
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "fcsViewer.openFileInNewWorkspace",
+          "when": "resourceExtname =~ /\\.fcs$/i",
+          "group": "navigation@20"
+        },
+        {
+          "command": "fcsViewer.addFileToWorkspace",
+          "when": "resourceExtname =~ /\\.fcs$/i && fcsViewer.workspaceOpen",
+          "group": "navigation@21"
+        }
+      ],
+      "editor/title/context": [
+        {
+          "command": "fcsViewer.openFileInNewWorkspace",
+          "when": "resourceExtname =~ /\\.fcs$/i"
+        },
+        {
+          "command": "fcsViewer.addFileToWorkspace",
+          "when": "resourceExtname =~ /\\.fcs$/i && fcsViewer.workspaceOpen"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "fcsViewer.openFileInNewWorkspace",
+          "when": "false"
+        },
+        {
+          "command": "fcsViewer.addFileToWorkspace",
+          "when": "false"
+        },
+        {
+          "command": "fcsViewer.debugState",
+          "when": "false"
+        },
+        {
+          "command": "fcsViewer.debugReset",
+          "when": "false"
+        },
+        {
+          "command": "fcsViewer.debugRevive",
+          "when": "false"
+        },
+        {
+          "command": "fcsViewer.debugCloseTabs",
+          "when": "false"
+        },
+        {
+          "command": "fcsViewer.debugWorkspace",
+          "when": "false"
+        },
+        {
+          "command": "fcsViewer.debugSelect",
+          "when": "false"
+        },
+        {
+          "command": "fcsViewer.debugEvictCache",
+          "when": "false"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "FCS Viewer",
+      "properties": {
+        "fcsViewer.defaultSampleSize": {
+          "type": "number",
+          "default": 5000,
+          "minimum": 100,
+          "description": "Number of events plot cards and the table render by default. Only these events are sent to the viewer."
+        },
+        "fcsViewer.defaultCofactor": {
+          "type": "number",
+          "default": 0,
+          "markdownDescription": "Default arcsinh cofactor. `0` picks automatically from `$CYT` (5 for mass cytometry, 150 for fluorescence)."
+        },
+        "fcsViewer.maxFileSizeMB": {
+          "type": "number",
+          "default": 1024,
+          "description": "Prompt before opening FCS files larger than this."
+        },
+        "fcsViewer.maxSliceMB": {
+          "type": "number",
+          "default": 16,
+          "description": "Confirm before transferring more than this many megabytes of events to the viewer. Large transfers are slow over a remote or dev container connection."
+        }
+      }
+    },
+    "customEditors": [
+      {
+        "viewType": "fcsViewer.fileRedirect",
+        "displayName": "FCS Viewer",
+        "selector": [
+          {
+            "filenamePattern": "*.fcs"
+          },
+          {
+            "filenamePattern": "*.FCS"
+          }
+        ],
+        "priority": "default"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run package",
+    "compile": "npm run check-types && npm run lint && node esbuild.mjs",
+    "watch": "npm-run-all -p watch:*",
+    "watch:esbuild": "node esbuild.mjs --watch",
+    "watch:tsc": "tsc --noEmit --watch --project tsconfig.json",
+    "package": "npm run check-types && npm run lint && node esbuild.mjs --production",
+    "check-types": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p tsconfig.webview.json",
+    "compile-tests": "tsc -p tsconfig.test.json",
+    "lint": "eslint src",
+    "test:unit": "npm run compile-tests && node --test \"out/test/unit/**/*.test.js\"",
+    "pretest": "npm run compile-tests && npm run compile",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.10",
+    "@types/node": "24.x",
+    "@types/plotly.js": "^3.0.13",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.4",
+    "@types/vscode": "^1.134.0",
+    "@types/vscode-webview": "^1.57.5",
+    "@vscode/test-cli": "^0.0.15",
+    "@vscode/test-electron": "^3.0.0",
+    "esbuild": "^0.28.2",
+    "eslint": "^10.5.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "npm-run-all": "^4.1.5",
+    "plotly.js": "^3.7.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.61.1",
+    "umap-js": "^1.4.0"
+  },
+  "overrides": {
+    "diff": "^8.0.4",
+    "serialize-javascript": "^7.0.6"
+  }
+}

@@ -1,0 +1,27 @@
+# Nothing from node_modules is ever needed: esbuild bundles the extension and
+# the webview into dist/. Without this, anything installed outside
+# package.json -- puppeteer for scripts/preview.mjs, for instance -- is read as
+# a production dependency by `npm ls --omit=dev` and packed into the vsix,
+# taking the extension from 6 files to nearly 900.
+node_modules/**
+.github/**
+docs/**
+.vscode/**
+.vscode-test/**
+.devcontainer/**
+.claude/**
+src/**
+out/**
+data/**
+esbuild.mjs
+scripts/**
+preview/**
+.gitignore
+.yarnrc
+vsc-extension-quickstart.md
+TODO.md
+**/tsconfig*.json
+**/eslint.config.mjs
+**/*.map
+**/*.ts
+**/.vscode-test.*
