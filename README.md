@@ -5,7 +5,7 @@
 > This extension was almost exclusively vibe-coded with `claude-code`.
 > I don't guarantee for its correctness, but its fun to play around with.
 
-![FCS Viewer Plots](docs/screenshots/plots.png)
+![FCS Viewer Demo](docs/fcs-viewer.gif)
 
 ## Features
 
