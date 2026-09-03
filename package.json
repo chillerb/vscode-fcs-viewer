@@ -3,7 +3,7 @@
   "displayName": "FCS Viewer",
   "description": "Inspect flow cytometry data from FCS files in VS Code",
   "publisher": "chillerb",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "license": "MIT",
   "icon": "logo.png",
   "engines": {
